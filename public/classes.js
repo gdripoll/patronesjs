@@ -2,62 +2,12 @@
 const CANVAS_WIDTH = 400;
 const CANVAS_HEIGHT = 400;
 
+// --------------------------------------------
 function getRandom(min, max) {
   return Math.floor(Math.random() * max) + min;
 }
 // --------------------------------------------
-
-// --------------------------------------------
-class Equipo {
-  constructor(gr, ch, pa, color) {
-    this.cantGr = gr;
-    this.cantCh = ch;
-    this.cantPa = pa;
-    this.color = color;
-    this.army = [];
-    for (var i = 0; i < this.cantGr; i++) this.army.push(new NaveGrande());
-    for (var i = 0; i < this.cantCh; i++) this.army.push(new NaveChica());
-    for (var i = 0; i < this.cantPa; i++) this.army.push(new Palito());
-  }
-  tick() {
-    push()
-    stroke(this.color);
-    fill(this.color);
-    for (var i = 0; i < this.army.length; i++) this.army[i].tick();
-    pop()
-  }
-  // CHOCAR
-  chocarNaveGrande(otro) {
-    for (var m = 0; m < this.army.length; m++) {
-      this.army[m].chocar(otro)
-    }
-  }
-  chocarNaveChica(otro) {
-    for (var m = 0; m < this.army.length; m++) {
-      this.army[m].chocar(otro)
-    }
-  }
-  chocarPalito(otro) {
-    for (var m = 0; m < this.army.length; m++) {
-      this.army[m].chocar(otro)
-    }
-  }
-  chocar(otro) {
-    for (var m = 0; m < this.army.length; m++) {
-      this.army[m].chocar(otro)
-    }
-  }
-  getVida() {
-    var vida = 0;
-    for (var i = 0; i < this.army.length; i++) {
-      if (this.army[i].getVida() <= 0) {
-        this.army.splice(i--, 1);
-      }
-    }
-    return this.army.length;
-  }
-}
-// --------------------------------------------
+// BASE
 // --------------------------------------------
 class SujetoAbstracto {
   constructor(x, y) {
@@ -87,6 +37,7 @@ class SujetoAbstracto {
     this.vida -= valor;
   }
 }
+// NAVES
 // --------------------------------------------
 class NaveChica extends SujetoAbstracto {
   constructor(x, y) {
@@ -155,7 +106,6 @@ class NaveChica extends SujetoAbstracto {
     circle(this.posicion.x, this.posicion.y, this.diametro);
   }
 }
-// --------------------------------------------
 class NaveGrande extends SujetoAbstracto {
   constructor(x, y) {
     super(x, y, 30);
@@ -223,7 +173,6 @@ class NaveGrande extends SujetoAbstracto {
     }
   }
 }
-// --------------------------------------------
 class Palito extends SujetoAbstracto {
   constructor(x, y, color) {
     super(x, y);
@@ -298,32 +247,53 @@ class Palito extends SujetoAbstracto {
     }
   }
 }
-
-// grande 5 chicas
-// chica 5 palitos
-// grande 10 palitos
-// los del mismo tipo muere
-//
-// grande
-// grande 100 a grande 100
-// grande 20  a chica 100
-// grande 10  a palito 100
-//
-// chica
-// chica 100 a grande 20
-// chica 100 a chica 100
-// chica 20  a palito 100
-//
-// palito
-// palito 100 a grande 10
-// palito 100 a chica 20
-// palito 100 a palito 100
-//
-
-// -------------------------------------------
-// -------------------------------------------
-// SIN USAR
-// -------------------------------------------
-// -------------------------------------------
-// -------------------------------------------
-// -------------------------------------------
+// --------------------------------------------
+class Equipo {
+  constructor(gr, ch, pa, color) {
+    this.cantGr = gr;
+    this.cantCh = ch;
+    this.cantPa = pa;
+    this.color = color;
+    this.army = [];
+    for (var i = 0; i < this.cantGr; i++) this.army.push(new NaveGrande());
+    for (var i = 0; i < this.cantCh; i++) this.army.push(new NaveChica());
+    for (var i = 0; i < this.cantPa; i++) this.army.push(new Palito());
+  }
+  tick() {
+    push()
+    stroke(this.color);
+    fill(this.color);
+    for (var i = 0; i < this.army.length; i++) this.army[i].tick();
+    pop()
+  }
+  // CHOCAR
+  chocarNaveGrande(otro) {
+    for (var m = 0; m < this.army.length; m++) {
+      this.army[m].chocar(otro)
+    }
+  }
+  chocarNaveChica(otro) {
+    for (var m = 0; m < this.army.length; m++) {
+      this.army[m].chocar(otro)
+    }
+  }
+  chocarPalito(otro) {
+    for (var m = 0; m < this.army.length; m++) {
+      this.army[m].chocar(otro)
+    }
+  }
+  chocar(otro) {
+    for (var m = 0; m < this.army.length; m++) {
+      this.army[m].chocar(otro)
+    }
+  }
+  getVida() {
+    var vida = 0;
+    for (var i = 0; i < this.army.length; i++) {
+      if (this.army[i].getVida() <= 0) {
+        this.army.splice(i--, 1);
+      }
+    }
+    return this.army.length;
+  }
+}
