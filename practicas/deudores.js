@@ -52,15 +52,123 @@
  * ¿Y si queremos detectar cuando se hace un retiro de plata que no se puede lograr por falta de fondos?
  */
 
+// -------------------------------------
+// PATRON OBSERVER
+// -------------------------------------
+
+class Entidad {
+    constructor(name) {
+        this.name = name
+    }
+    deposito(cliente, monto) {
+        this.say("deposito", cliente, monto)
+    }
+    retiro(cliente, monto) {
+        this.say("retiro", cliente, monto)
+    }
+    saldo(cliente) {
+        this.say("saldo", cliente, cliente.getSaldo())
+    }
+    say(operacion, cliente, monto) {
+        console.log(this.name, " -- AVISO! ", operacion, cliente.getName(), monto)
+    }
+}
+
+class Afip extends Entidad {
+    constructor(name) {
+        super(name)
+    }
+    deposito(cliente, monto) {
+        this.say("deposito", cliente, monto)
+    }
+    retiro(cliente, monto) {
+    }
+    saldo(cliente) {
+    }
+}
+class Aac extends Entidad {
+    constructor(name) {
+        super(name)
+    }
+    deposito(cliente, monto) {
+        if (monto > 1000) {
+            this.say("deposito mayor a 1000", cliente, monto)
+        }
+    }
+    retiro(cliente, monto) {
+    }
+    saldo(cliente) {
+    }
+}
+class Mafia extends Entidad {
+    constructor(name) {
+        super(name)
+    }
+    deposito(cliente, monto) {
+    }
+    retiro(cliente, monto) {
+    }
+    saldo(cliente) {
+    }
+}
+class Visa extends Entidad {
+    constructor(name) {
+        super(name)
+    }
+    deposito(cliente, monto) {
+    }
+    retiro(cliente, monto) {
+    }
+    saldo(cliente) {
+    }
+}
+// -------------------------------------
+
+class Informes {
+    constructor(entidades) {
+        this.entidades = entidades
+    }
+    deposito(cliente, monto) {
+        // console.log("INFORME: deposito", cliente.getName(), monto)
+        this.entidades.forEach(ent => {
+            ent.deposito(cliente, monto)
+        });
+        this.saldo(cliente)
+    }
+    retiro(cliente, monto) {
+        // console.log("INFORME: retiro", cliente.getName(), monto)
+        this.entidades.forEach(ent => {
+            ent.retiro(cliente, monto)
+        });
+        this.saldo(cliente)
+    }
+    saldo(cliente) {
+        // console.log("INFORME: saldo", cliente.getName(), cliente.getSaldo())
+        this.entidades.forEach(ent => {
+            ent.saldo(cliente)
+        });
+    }
+}
+
+// -------------------------------------
 
 class CajaDeAhorro {
-    constructor(nombre, plataInicial) {
+    constructor(nombre, plataInicial, informes) {
         this.nombre = nombre
         this.total = plataInicial
+        this.informes = informes
+
+    }
+    getName() {
+        return this.nombre;
+    }
+    getSaldo() {
+        return this.total;
     }
 
     ponerPlata(plata) {
         this.total += plata
+        this.informes.deposito(this, plata)
     }
 
     sacarPlata(plata) {
@@ -72,14 +180,25 @@ class CajaDeAhorro {
     }
 }
 
+const AFIP = new Afip("afip")
+const AAC = new Aac("aac")
+const MAFIA = new Mafia("mafia")
+const VISA = new Visa("visa")
 
-const clientes = {
-    pepe: new CajaDeAhorro('Pepe Ventilete', 100),
-    juanito: new CajaDeAhorro('Juan Garcalieri', 500),
-    natalia: new CajaDeAhorro('Natalia Buenaventura', 250),
+const entidades = {
+    "pepe": [AFIP, AAC, VISA],
+    "juan": [AFIP, AAC, MAFIA],
+    "natalia": [AAC, VISA],
 }
 
+const clientes = {
+    pepe: new CajaDeAhorro('Pepe Ventilete', 100, new Informes(entidades['pepe'])),
+    juanito: new CajaDeAhorro('Juan Garcalieri', 500, new Informes(entidades['juan'])),
+    natalia: new CajaDeAhorro('Natalia Buenaventura', 250, new Informes(entidades['natalia'])),
+}
 
+// NO TOCAR !
+// -------------------------------------
 
 clientes.pepe.ponerPlata(100)
 clientes.pepe.ponerPlata(40)

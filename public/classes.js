@@ -7,6 +7,16 @@ function getRandom(min, max) {
   return Math.floor(Math.random() * max) + min;
 }
 // --------------------------------------------
+class ParcaObserver {
+  constructor() {
+    console.log("ParcaObserver:constructor")
+  }
+  murio(sujeto) {
+    console.log("ParcaObserver:murio -- ", parseInt(sujeto.posicion.x), parseInt(sujeto.posicion.y))
+    MensajesGeneral.agregar("MUERTE en [" + parseInt(sujeto.posicion.x) + "," + parseInt(sujeto.posicion.y) + "]", 60)
+  }
+}
+// --------------------------------------------
 // BASE
 // --------------------------------------------
 class SujetoAbstracto {
@@ -17,6 +27,7 @@ class SujetoAbstracto {
     );
     this.velocidad = V(getRandom(-2, 2), getRandom(-2, 2));
     this.vida = 100;
+    this.observers = []
   }
   // movimiento
   mover() {
@@ -35,6 +46,16 @@ class SujetoAbstracto {
   }
   sacarVida(valor) {
     this.vida -= valor;
+    if (this.vida <= 0) {
+      for (var i = 0; i < this.observers.length; i++) this.observers[i].murio(this)
+    }
+  }
+  // OBSERVER
+  subscribir(subscriptor) {
+    this.observers.push(subscriptor);
+  }
+  desuscribir(subscriptor) {
+    // TODO
   }
 }
 // NAVES
@@ -248,8 +269,9 @@ class Palito extends SujetoAbstracto {
   }
 }
 // --------------------------------------------
-class Equipo {
+class Equipo extends SujetoAbstracto {
   constructor(gr, ch, pa, color) {
+    super(0, 0)
     this.cantGr = gr;
     this.cantCh = ch;
     this.cantPa = pa;
@@ -288,7 +310,6 @@ class Equipo {
     }
   }
   getVida() {
-    var vida = 0;
     for (var i = 0; i < this.army.length; i++) {
       if (this.army[i].getVida() <= 0) {
         this.army.splice(i--, 1);
