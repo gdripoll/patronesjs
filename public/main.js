@@ -5,7 +5,7 @@ let entidades = []; // global
 // mensaje del capitan
 // cuando muere el capitan mueren todos
 
-colores = ["#C00", "#0C0", "#00C"];
+colores = ["#C00", "#0C0", "#00C", "#E00", "#0E0", "#00E", "#F00", "#0F0", "#00F", "#FFF"];
 const MensajesGeneral = new Mensajes(300, 10)
 
 function setup() {

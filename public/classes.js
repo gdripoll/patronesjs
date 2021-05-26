@@ -12,8 +12,17 @@ class ParcaObserver {
     console.log("ParcaObserver:constructor")
   }
   murio(sujeto) {
-    console.log("ParcaObserver:murio -- ", parseInt(sujeto.posicion.x), parseInt(sujeto.posicion.y))
+    // console.log("ParcaObserver:murio -- ", parseInt(sujeto.posicion.x), parseInt(sujeto.posicion.y))
     MensajesGeneral.agregar("MUERTE en [" + parseInt(sujeto.posicion.x) + "," + parseInt(sujeto.posicion.y) + "]", 60)
+  }
+  murioEquipo(sujeto) {
+    // console.log("ParcaObserver:murioEquipo -- ", sujeto)
+    MensajesGeneral.agregar("MUERTE del Team -- " + sujeto.color, 120)
+  }
+  murioCapitan(team) {
+    console.log("ParcaObserver:murioEquipo -- ", team)
+    MensajesGeneral.agregar("MUERTE del Capitan -- " + team.color, 120)
+    team.killTeam()
   }
 }
 // --------------------------------------------
@@ -276,8 +285,10 @@ class Equipo extends SujetoAbstracto {
     this.cantCh = ch;
     this.cantPa = pa;
     this.color = color;
+    this.captains = []
     this.army = [];
     for (var i = 0; i < this.cantGr; i++) this.army.push(new NaveGrande());
+    this.captains.push(this.army[0])
     for (var i = 0; i < this.cantCh; i++) this.army.push(new NaveChica());
     for (var i = 0; i < this.cantPa; i++) this.army.push(new Palito());
   }
@@ -315,6 +326,19 @@ class Equipo extends SujetoAbstracto {
         this.army.splice(i--, 1);
       }
     }
+    for (var i = 0; i < this.captains.length; i++) {
+      if (this.captains[i].vida <= 0) {
+        for (var i = 0; i < this.observers.length; i++) this.observers[i].murioCapitan(this)
+      }
+    }
+    if (this.army.length == 0) {
+      for (var i = 0; i < this.observers.length; i++) this.observers[i].murioEquipo(this)
+    }
     return this.army.length;
+  }
+  killTeam() {
+    for (var i = 0; i < this.army.length; i++) {
+      this.army[i].sacarVida(100)
+    }
   }
 }
