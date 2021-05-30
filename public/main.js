@@ -1,13 +1,8 @@
 let entidades = []; // global
 
-
 // mueren todos
 // mensaje del capitan
 // cuando muere el capitan mueren todos
-
-colores = ["blue", "red", "orange", "white"];
-const MensajesGeneral = new Mensajes(300, 10)
-
 
 // nave grande solo horizontal
 // nave grande cada tanto cambia de direccion
@@ -15,49 +10,62 @@ const MensajesGeneral = new Mensajes(300, 10)
 // strategy?    callback me parece
 // LUNES!!!
 
+colores = ["blue", "red", "orange", "white"];
+const MensajesGeneral = new Mensajes(300, 10);
 
 function setup() {
   createCanvas(400, 400);
 
-  parca = new ParcaObserver()
+  parca = new ParcaObserver();
+  moveH = new moveHorizontal();
+  moveV = new moveVertical();
+  moveR = new moveRandom();
 
-  equipo1 = []
-  for (var i = 0; i < 2; i++) equipo1.push(new NaveGrande());
-  for (var i = 0; i < 4; i++) equipo1.push(new NaveChica());
-  for (var i = 0; i < 10; i++) equipo1.push(new Palito());
-  e1 = new Equipo(equipo1, colores[0])
-  entidades.push(e1)
-  pCap1 = new CapitanObserver(equipo1)
-  equipo1[0].subscribir(pCap1)
-
-  equipo2 = []
-  for (var i = 0; i < 2; i++) equipo2.push(new NaveGrande());
-  for (var i = 0; i < 4; i++) equipo2.push(new NaveChica());
-  for (var i = 0; i < 10; i++) equipo2.push(new Palito());
-  e2 = new Equipo(equipo2, colores[1])
-  entidades.push(e2)
-  pCap2 = new CapitanObserver(equipo2)
-  equipo2[0].subscribir(pCap2)
-
-  // for (var i = 0; i < 10; i++) {
-  //   a = new NaveChica()
-  //   a.subscribir(parca)
-  //   entidades.push(a)
-  // }
-
+  // ---EQUIPO1----------------------
+  equipo1 = [];
   for (var i = 0; i < 2; i++) {
-    eq = new Equipo(2, 4, 10, colores[i]);
-    eq.subscribir(parca)
-    entidades.push(eq);
+    n = new NaveGrande();
+    n.setMover(moveH);
+    equipo1.push(n);
   }
+  for (var i = 0; i < 4; i++) {
+    n = new NaveChica();
+    n.setMover(moveR);
+    equipo1.push(n);
+  }
+  for (var i = 0; i < 30; i++) {
+    n = new Palito();
+    n.setMover(moveV);
+    equipo1.push(n);
+  }
+  e1 = new Equipo(equipo1, colores[0]);
+  entidades.push(e1);
+  pCap1 = new CapitanObserver(equipo1);
+  equipo1[0].subscribir(pCap1);
 
-  // for (var i = 0; i < 10; i++) {
-  //   a = new NaveChica()
-  //   a.subscribir(parca)
-  //   entidades.push(a)
-  // }
+  // ---EQUIPO2----------------------
+  equipo2 = [];
+  for (var i = 0; i < 2; i++) {
+    n = new NaveGrande();
+    n.setMover(moveH);
+    equipo2.push(n);
+  }
+  for (var i = 0; i < 4; i++) {
+    n = new NaveChica();
+    n.setMover(moveR);
+    equipo2.push(n);
+  }
+  for (var i = 0; i < 30; i++) {
+    n = new Palito();
+    n.setMover(moveV);
+    equipo2.push(n);
+  }
+  e2 = new Equipo(equipo2, colores[1]);
+  entidades.push(e2);
+  pCap2 = new CapitanObserver(equipo2);
+  equipo2[0].subscribir(pCap2);
 
-  MensajesGeneral.agregar("READY PLAYERS!", 120)
+  MensajesGeneral.agregar("READY PLAYERS!", 120);
 }
 
 function draw() {
@@ -79,5 +87,5 @@ function draw() {
   for (let i = 0; i < entidades.length; i++) entidades[i].tick();
 
   // mensajes
-  MensajesGeneral.mostrar()
+  MensajesGeneral.mostrar();
 }

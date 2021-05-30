@@ -3,46 +3,13 @@ const CANVAS_WIDTH = 400;
 const CANVAS_HEIGHT = 400;
 
 // --------------------------------------------
+// UTILS
 function getRandom(min, max) {
   return Math.floor(Math.random() * max) + min;
 }
-// --------------------------------------------
-class ParcaObserver {
-  constructor() {
-    console.log("ParcaObserver:constructor")
-  }
-  murio(sujeto) {
-    // console.log("ParcaObserver:murio -- ", parseInt(sujeto.posicion.x), parseInt(sujeto.posicion.y))
-    MensajesGeneral.agregar("MUERTE en [" + parseInt(sujeto.posicion.x) + "," + parseInt(sujeto.posicion.y) + "]", 60)
-  }
-  murioEquipo(sujeto) {
-    // console.log("ParcaObserver:murioEquipo -- ", sujeto)
-    MensajesGeneral.agregar("MUERTE del Team -- " + sujeto.color, 120)
-  }
-  // murioCapitan(team) {
-  //   // console.log("ParcaObserver:murioCapitan -- ", team)
-  //   MensajesGeneral.agregar("MUERTE del Capitan -- " + team.color, 120)
-  //   team.killTeam()
-  // }
-}
-
-class CapitanObserver {
-  constructor(army) {
-    this.army = army
-    console.log("ParcaObserver:constructor")
-  }
-  murio(sujeto) {
-    MensajesGeneral.agregar("MUERTE en [" + parseInt(sujeto.posicion.x) + "," + parseInt(sujeto.posicion.y) + "]", 60)
-    for (var i = 0; i < this.army.length; i++) {
-      this.army[i].sacarVida(100)
-    }
-  }
-}
-
 
 // --------------------------------------------
-// BASE
-// --------------------------------------------
+// NAVES
 class SujetoAbstracto {
   constructor(x, y) {
     this.posicion = V(
@@ -51,12 +18,20 @@ class SujetoAbstracto {
     );
     this.velocidad = V(getRandom(-2, 2), getRandom(-2, 2));
     this.vida = 100;
-    this.observers = []
+    this.observers = [];
+    this.extMover = undefined;
   }
   // movimiento
   mover() {
-    this.posicion.x += this.velocidad.x;
-    this.posicion.y += this.velocidad.y;
+    if (this.extMover == undefined) {
+      this.posicion.x += this.velocidad.x;
+      this.posicion.y += this.velocidad.y;
+    } else {
+      this.posicion = this.extMover.mover(this.posicion, this.velocidad);
+    }
+  }
+  setMover(mover) {
+    this.extMover = mover;
   }
   // draw
   tick() {
@@ -70,9 +45,10 @@ class SujetoAbstracto {
   }
   sacarVida(valor) {
     this.vida -= valor;
-    if (this.vida <= 0) {
-      for (var i = 0; i < this.observers.length; i++) this.observers[i].murio(this)
-    }
+    // if (this.vida <= 0) {
+    //   for (var i = 0; i < this.observers.length; i++)
+    //     this.observers[i].murio(this);
+    // }
   }
   // OBSERVER
   subscribir(subscriptor) {
@@ -82,8 +58,6 @@ class SujetoAbstracto {
     // TODO
   }
 }
-// NAVES
-// --------------------------------------------
 class NaveChica extends SujetoAbstracto {
   constructor(x, y) {
     super(x, y, 15);
@@ -296,47 +270,47 @@ class Palito extends SujetoAbstracto {
 class Equipo extends SujetoAbstracto {
   // constructor(gr, ch, pa, color) {
   constructor(army, color) {
-    super(0, 0)
+    super(0, 0);
     // this.cantGr = gr;
     // this.cantCh = ch;
     // this.cantPa = pa;
     this.color = color;
     this.army = army;
-    this.captains = []
+    this.captains = [];
     // for (var i = 0; i < this.cantGr; i++) this.army.push(new NaveGrande());
     // this.captains.push(this.army[0])
     // for (var i = 0; i < this.cantCh; i++) this.army.push(new NaveChica());
     // for (var i = 0; i < this.cantPa; i++) this.army.push(new Palito());
   }
   agregarCapitan(capitan) {
-    this.captains.push(capitan)
+    this.captains.push(capitan);
   }
   tick() {
-    push()
+    push();
     stroke(this.color);
     fill(this.color);
     for (var i = 0; i < this.army.length; i++) this.army[i].tick();
-    pop()
+    pop();
   }
   // CHOCAR
   chocarNaveGrande(otro) {
     for (var m = 0; m < this.army.length; m++) {
-      this.army[m].chocar(otro)
+      this.army[m].chocar(otro);
     }
   }
   chocarNaveChica(otro) {
     for (var m = 0; m < this.army.length; m++) {
-      this.army[m].chocar(otro)
+      this.army[m].chocar(otro);
     }
   }
   chocarPalito(otro) {
     for (var m = 0; m < this.army.length; m++) {
-      this.army[m].chocar(otro)
+      this.army[m].chocar(otro);
     }
   }
   chocar(otro) {
     for (var m = 0; m < this.army.length; m++) {
-      this.army[m].chocar(otro)
+      this.army[m].chocar(otro);
     }
   }
   getVida() {
@@ -353,7 +327,8 @@ class Equipo extends SujetoAbstracto {
     //   }
     // }
     if (this.army.length == 0) {
-      for (var i = 0; i < this.observers.length; i++) this.observers[i].murioEquipo(this)
+      for (var i = 0; i < this.observers.length; i++)
+        this.observers[i].murioEquipo(this);
     }
     return this.army.length;
   }
@@ -371,5 +346,90 @@ class Equipo extends SujetoAbstracto {
   }
   desuscribir(subscriptor) {
     // TODO
+  }
+}
+
+// --------------------------------------------
+// PARCAS
+class ParcaObserver {
+  constructor() {
+    // console.log("ParcaObserver:constructor");
+  }
+  murio(sujeto) {
+    // console.log("ParcaObserver:murio -- ", parseInt(sujeto.posicion.x), parseInt(sujeto.posicion.y))
+    MensajesGeneral.agregar(
+      "MUERTE en [" +
+        parseInt(sujeto.posicion.x) +
+        "," +
+        parseInt(sujeto.posicion.y) +
+        "]",
+      60
+    );
+  }
+  // murioEquipo(sujeto) {
+  //   // console.log("ParcaObserver:murioEquipo -- ", sujeto)
+  //   MensajesGeneral.agregar("MUERTE del Team -- " + sujeto.color, 120)
+  // }
+  // murioCapitan(team) {
+  //   // console.log("ParcaObserver:murioCapitan -- ", team)
+  //   MensajesGeneral.agregar("MUERTE del Capitan -- " + team.color, 120)
+  //   team.killTeam()
+  // }
+}
+class CapitanObserver {
+  constructor(army) {
+    this.army = army;
+    // console.log("ParcaObserver:constructor");
+  }
+  murio(sujeto) {
+    MensajesGeneral.agregar(
+      "MUERTE en [" +
+        parseInt(sujeto.posicion.x) +
+        "," +
+        parseInt(sujeto.posicion.y) +
+        "]",
+      60
+    );
+    for (var i = 0; i < this.army.length; i++) {
+      this.army[i].sacarVida(100);
+    }
+  }
+}
+
+// --------------------------------------------
+// MOVIMIENTOS
+class moveCommon {
+  // movimiento
+  mover(posicion, velocidad) {
+    return V(posicion.x + velocidad.x, posicion.y + velocidad.y);
+  }
+}
+class moveHorizontal {
+  // movimiento
+  mover(posicion, velocidad) {
+    return V(posicion.x + velocidad.x, posicion.y);
+  }
+}
+class moveVertical {
+  // movimiento
+  mover(posicion, velocidad) {
+    return V(posicion.x, posicion.y + velocidad.y);
+  }
+}
+class moveRandom {
+  // movimiento
+  mover(posicion, velocidad) {
+    const dice = getRandom(0, 100);
+    if (dice > 80) {
+      return V(posicion.x + velocidad.x, posicion.y + velocidad.y);
+    } else if (dice > 60) {
+      return V(posicion.x, posicion.y + velocidad.y);
+    } else if (dice > 40) {
+      return V(posicion.x + velocidad.x, posicion.y);
+    } else if (dice > 20) {
+      return V(posicion.x + velocidad.y, posicion.y + velocidad.x);
+    } else {
+      return posicion;
+    }
   }
 }
