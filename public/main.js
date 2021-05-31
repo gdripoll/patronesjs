@@ -10,6 +10,8 @@ let entidades = []; // global
 // strategy?    callback me parece
 // LUNES!!!
 
+// https://refactoring.guru/es
+
 colores = ["blue", "red", "orange", "white"];
 const MensajesGeneral = new Mensajes(300, 10);
 
@@ -33,7 +35,7 @@ function setup() {
     n.setMover(moveR);
     equipo1.push(n);
   }
-  for (var i = 0; i < 30; i++) {
+  for (var i = 0; i < 10; i++) {
     n = new Palito();
     n.setMover(moveV);
     equipo1.push(n);
@@ -55,7 +57,7 @@ function setup() {
     n.setMover(moveR);
     equipo2.push(n);
   }
-  for (var i = 0; i < 30; i++) {
+  for (var i = 0; i < 10; i++) {
     n = new Palito();
     n.setMover(moveV);
     equipo2.push(n);
