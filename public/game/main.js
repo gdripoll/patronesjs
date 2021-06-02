@@ -1,20 +1,24 @@
+// Juevo en JS
+// Main File
+// profesor: oclesnd@globalhitss.com
+
+// CONSTANTS
+const CANVAS_WIDTH = 400;
+const CANVAS_HEIGHT = 400;
+
+// --------------------------------------------
+// UTILS
+function getRandom(min, max) {
+  return Math.floor(Math.random() * max) + min;
+}
+function getRandomX() {
+  return getRandom(0, CANVAS_WIDTH);
+}
+function getRandomY() {
+  return getRandom(0, CANVAS_HEIGHT);
+}
+
 let entidades = []; // global
-
-// oclesnd@globalhitss.com
-// mail
-// gang of four design patterns gamma helm johson vlissides
-// mueren todos
-// mensaje del capitan
-// cuando muere el capitan mueren todos
-
-// nave grande solo horizontal
-// nave grande cada tanto cambia de direccion
-// nave chica y grande se mueven distinto
-// strategy?    callback me parece
-// LUNES!!!
-// the coding train
-// high score documentary
-// https://refactoring.guru/es
 
 colores = ["blue", "red", "orange", "white"];
 const MensajesGeneral = new Mensajes(300, 10);
@@ -22,6 +26,7 @@ const MensajesGeneral = new Mensajes(300, 10);
 function setup() {
   createCanvas(400, 400);
 
+  // ---AUXILIARES-------------------
   parca = new ParcaObserver();
   moveH = new moveHorizontal();
   moveV = new moveVertical();
@@ -30,18 +35,18 @@ function setup() {
   // ---EQUIPO1----------------------
   equipo1 = [];
   for (var i = 0; i < 2; i++) {
-    n = new NaveGrande();
-    n.setMover(moveH);
+    n = new NaveGrande(getRandomX(), getRandomY(), new moveHorizontal());
+    n.subscribir(parca);
     equipo1.push(n);
   }
   for (var i = 0; i < 4; i++) {
-    n = new NaveChica();
-    n.setMover(moveR);
+    n = new NaveChica(getRandomX(), getRandomY(), new moveRandom());
+    n.subscribir(parca);
     equipo1.push(n);
   }
-  for (var i = 0; i < 10; i++) {
-    n = new Palito();
-    n.setMover(moveV);
+  for (var i = 0; i < 3; i++) {
+    n = new Palito(getRandomX(), getRandomY(), new moveVertical());
+    n.subscribir(parca);
     equipo1.push(n);
   }
   e1 = new Equipo(equipo1, colores[0]);
@@ -52,18 +57,18 @@ function setup() {
   // ---EQUIPO2----------------------
   equipo2 = [];
   for (var i = 0; i < 2; i++) {
-    n = new NaveGrande();
-    n.setMover(moveH);
+    n = new NaveGrande(getRandomX(), getRandomY(), new moveHorizontal());
+    n.subscribir(parca);
     equipo2.push(n);
   }
   for (var i = 0; i < 4; i++) {
-    n = new NaveChica();
-    n.setMover(moveR);
+    n = new NaveChica(getRandomX(), getRandomY(), new moveRandom());
+    n.subscribir(parca);
     equipo2.push(n);
   }
-  for (var i = 0; i < 10; i++) {
-    n = new Palito();
-    n.setMover(moveV);
+  for (var i = 0; i < 3; i++) {
+    n = new Palito(getRandomX(), getRandomY(), new moveVertical());
+    n.subscribir(parca);
     equipo2.push(n);
   }
   e2 = new Equipo(equipo2, colores[1]);
@@ -94,4 +99,9 @@ function draw() {
 
   // mensajes
   MensajesGeneral.mostrar();
+}
+
+function mousePressed() {
+  const bala = new Bala(200, 200, p5.Vector.random2D())
+  entidades.push(bala)
 }
