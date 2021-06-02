@@ -19,19 +19,29 @@ class moveVertical {
   }
 }
 class moveRandom {
+  constructor() {
+    this.loop = 0
+    this.dice = 0
+  }
   // movimiento
   mover(posicion, velocidad) {
-    const dice = getRandom(0, 100);
-    if (dice > 80) {
+    this.roll()
+    if (this.dice > 80) {
       return V(posicion.x + velocidad.x, posicion.y + velocidad.y);
-    } else if (dice > 60) {
+    } else if (this.dice > 70) {
       return V(posicion.x, posicion.y + velocidad.y);
-    } else if (dice > 40) {
+    } else if (this.dice > 60) {
       return V(posicion.x + velocidad.x, posicion.y);
-    } else if (dice > 20) {
+    } else if (this.dice > 30) {
       return V(posicion.x + velocidad.y, posicion.y + velocidad.x);
     } else {
       return posicion;
     }
   }
+  roll() {
+    if (this.loop++ % 60 == 0) {
+      this.dice = getRandom(0, 100)
+    }
+  }
+
 }

@@ -1,9 +1,10 @@
 // NAVES
 // --------------------------------------------
 class SujetoAbstracto {
-  constructor(x, y, mover) {
+  constructor(x, y, mover, gun) {
     this.posicion = V(x, y)
     this.objMover = mover
+    this.objGun = gun
     this.velocidad = V(getRandom(-2, 2), getRandom(-2, 2));
     this.vida = 100;
     this.observers = [];
@@ -11,6 +12,7 @@ class SujetoAbstracto {
   // movimiento
   mover() {
     this.posicion = this.objMover.mover(this.posicion, this.velocidad);
+    this.objGun.disparar(this)
   }
   // draw
   tick() {
@@ -35,8 +37,8 @@ class SujetoAbstracto {
   }
 }
 class NaveGrande extends SujetoAbstracto {
-  constructor(x, y, mover) {
-    super(x, y, mover);
+  constructor(x, y, mover, gun) {
+    super(x, y, mover, gun);
     this.diametro = 30;
     this.radio = this.diametro / 2;
     this.velocidad = V(2, 1);
@@ -66,12 +68,7 @@ class NaveGrande extends SujetoAbstracto {
     // grande 100 a grande 100
     // grande 20  a chica 100
     // grande 10  a palito 100
-    try {
-
-      return otro.chocarNaveGrande(this);
-    } catch (e) {
-      console.log(otro)
-    }
+    return otro.chocarNaveGrande(this);
   }
   chocarNaveChica(otro) {
     const sumaRadios = this.radio + otro.radio;
@@ -107,15 +104,14 @@ class NaveGrande extends SujetoAbstracto {
   }
   chocarBala(otro) {
     if (distancia(this.posicion, otro.posicion) < this.radio) {
-      console.log("NaveGrande SHOOTED!", otro.posicion.x, otro.posicion.y)
       this.sacarVida(20)
       otro.sacarVida(otro.getVida())
     }
   }
 }
 class NaveChica extends SujetoAbstracto {
-  constructor(x, y, mover) {
-    super(x, y, mover);
+  constructor(x, y, mover, gun) {
+    super(x, y, mover, gun);
     this.diametro = 15;
     this.radio = this.diametro / 2;
     this.velocidad = V(2, 3);
@@ -181,15 +177,14 @@ class NaveChica extends SujetoAbstracto {
   }
   chocarBala(otro) {
     if (distancia(this.posicion, otro.posicion) < this.radio) {
-      console.log("NaveChica SHOOTED!", otro.posicion.x, otro.posicion.y)
       this.sacarVida(20)
       otro.sacarVida(otro.getVida())
     }
   }
 }
 class Palito extends SujetoAbstracto {
-  constructor(x, y, mover) {
-    super(x, y, mover);
+  constructor(x, y, mover, gun) {
+    super(x, y, mover, gun);
     this.velocidad = V(4, 4);
     this.alto = 20;
   }
@@ -264,7 +259,6 @@ class Palito extends SujetoAbstracto {
     // la bala llega con float, con lo cual es casi imposible que concuerde 
     // con el X del palito
     if (this.posicion.x == parseInt(otro.posicion.x) && (this.posicion.y < otro.posicion.y && this.getBottom().y >= otro.posicion.y)) {
-      console.log("Palito SHOOTED!", this.posicion.x, this.posicion.y)
       this.sacarVida(this.getVida())
       otro.sacarVida(otro.getVida())
     }

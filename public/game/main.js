@@ -26,55 +26,54 @@ const MensajesGeneral = new Mensajes(300, 10);
 function setup() {
   createCanvas(400, 400);
 
-  // ---AUXILIARES-------------------
+  // ---OBSERVERS--------------------
   parca = new ParcaObserver();
-  moveH = new moveHorizontal();
-  moveV = new moveVertical();
-  moveR = new moveRandom();
+
+  // ---EQUIPOS----------------------
+  equipo1 = [];
+  equipo2 = [];
 
   // ---EQUIPO1----------------------
-  equipo1 = [];
-  for (var i = 0; i < 2; i++) {
-    n = new NaveGrande(getRandomX(), getRandomY(), new moveHorizontal());
+  for (var i = 0; i < 1; i++) {
+    n = new NaveGrande(getRandomX(), getRandomY(), new moveHorizontal(), new SniperGun(equipo1, equipo2));
     n.subscribir(parca);
     equipo1.push(n);
   }
-  for (var i = 0; i < 4; i++) {
-    n = new NaveChica(getRandomX(), getRandomY(), new moveRandom());
-    n.subscribir(parca);
-    equipo1.push(n);
-  }
-  for (var i = 0; i < 3; i++) {
-    n = new Palito(getRandomX(), getRandomY(), new moveVertical());
-    n.subscribir(parca);
-    equipo1.push(n);
-  }
+  // for (var i = 0; i < 4; i++) {
+  //   n = new NaveChica(getRandomX(), getRandomY(), new moveRandom(), new DummyGun(equipo1, equipo2));
+  //   n.subscribir(parca);
+  //   equipo1.push(n);
+  // }
+  // for (var i = 0; i < 3; i++) {
+  //   n = new Palito(getRandomX(), getRandomY(), new moveVertical(), new DummyGun(equipo1));
+  //   n.subscribir(parca);
+  //   equipo1.push(n);
+  // }
   e1 = new Equipo(equipo1, colores[0]);
   entidades.push(e1);
-  pCap1 = new CapitanObserver(equipo1);
-  equipo1[0].subscribir(pCap1);
+  // pCap1 = new CapitanObserver(equipo1);
+  // equipo1[0].subscribir(pCap1);
 
   // ---EQUIPO2----------------------
-  equipo2 = [];
-  for (var i = 0; i < 2; i++) {
-    n = new NaveGrande(getRandomX(), getRandomY(), new moveHorizontal());
+  for (var i = 0; i < 1; i++) {
+    n = new NaveGrande(getRandomX(), getRandomY(), new moveHorizontal(), new SniperGun(equipo2, equipo1));
     n.subscribir(parca);
     equipo2.push(n);
   }
-  for (var i = 0; i < 4; i++) {
-    n = new NaveChica(getRandomX(), getRandomY(), new moveRandom());
-    n.subscribir(parca);
-    equipo2.push(n);
-  }
-  for (var i = 0; i < 3; i++) {
-    n = new Palito(getRandomX(), getRandomY(), new moveVertical());
-    n.subscribir(parca);
-    equipo2.push(n);
-  }
+  // for (var i = 0; i < 4; i++) {
+  //   n = new NaveChica(getRandomX(), getRandomY(), new moveRandom(), new DummyGun(equipo2, equipo1));
+  //   n.subscribir(parca);
+  //   equipo2.push(n);
+  // }
+  // for (var i = 0; i < 3; i++) {
+  //   n = new Palito(getRandomX(), getRandomY(), new moveVertical(), new DummyGun(equipo2));
+  //   n.subscribir(parca);
+  //   equipo2.push(n);
+  // }
   e2 = new Equipo(equipo2, colores[1]);
   entidades.push(e2);
-  pCap2 = new CapitanObserver(equipo2);
-  equipo2[0].subscribir(pCap2);
+  // pCap2 = new CapitanObserver(equipo2);
+  // equipo2[0].subscribir(pCap2);
 
   MensajesGeneral.agregar("READY PLAYERS!", 120);
 }
@@ -101,7 +100,16 @@ function draw() {
   MensajesGeneral.mostrar();
 }
 
-function mousePressed() {
-  const bala = new Bala(200, 200, p5.Vector.random2D())
-  entidades.push(bala)
+// function mousePressed() {
+//   const bala = new Bala(200, 200, p5.Vector.random2D())
+//   entidades.push(bala)
+// }
+
+// posicion del mouse
+function mouseDragged() {
+  document.querySelector(".px-3 h1").innerHTML = "[" + mouseX + "," + mouseY + "]"
+  return false;
+}
+function mouseReleased() {
+  document.querySelector(".px-3 h1").innerHTML = "Patrones de diseño"
 }
