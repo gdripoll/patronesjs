@@ -1,5 +1,8 @@
 let entidades = []; // global
 
+// oclesnd@globalhitss.com
+// mail
+// gang of four design patterns gamma helm johson vlissides
 // mueren todos
 // mensaje del capitan
 // cuando muere el capitan mueren todos
@@ -9,7 +12,8 @@ let entidades = []; // global
 // nave chica y grande se mueven distinto
 // strategy?    callback me parece
 // LUNES!!!
-
+// the coding train
+// high score documentary
 // https://refactoring.guru/es
 
 colores = ["blue", "red", "orange", "white"];
