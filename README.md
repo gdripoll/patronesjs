@@ -1,32 +1,30 @@
-# Instalar
+# Instrucciones
 
+## Instalar
 ```bash
 npm install
 ```
-
 Renombrar los archivos:
 - public/classes.example.js => public/classes.js
 - public/main.example.js    => public/main.js
 
-# Correr
-
+## Correr
 Si tenemos nodejs instalado:
 ```bash
 npm run dev
 ```
-
 Si no lo tenemos instalado:
 - Abrímos el archivo public/index.html con un browser.
 
+---
 
-# Apuntes
+# Recomendaciones
+- *The coding train* -- Tutorial P5 Youtube
+- *High score* -- documental Netflix
+- https://refactoring.guru/es -- Sitio recomentado
+- *Gang of four: design patterns* (?) gamma helm johson vlissides -- libro de patrones
 
-// the coding train
-// high score documentary
-// https://refactoring.guru/es
-// contactarse por mail a oclesnd@globalhitss.com
-// gang of four design patterns >? gamma helm johson vlissides
-
+---
 
 # Desarrollo
 (no tengo acentos en la maquina que estoy escribiendo)
@@ -66,3 +64,4 @@ Todo esta publico en https://github.com/gdripoll/patronesjs
 - Funcion de pantalla GameOVer que elimina todos los objetos, limpia la pantalla y pone el cartel de GAME OVER.
 
 **NOTA**: A la pantalla de GameOver no le agregue fonts ni mas diseno porque no podia mandar binarios (ttf)
+
