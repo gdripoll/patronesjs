@@ -82,6 +82,7 @@ class SniperGun {
       this.army.push(bala)
     }
   }
+  // TODO: le tira a las balas del enemigo!!!
   findMeATarget(shooter) {
     var closest = 0
     var minDist = 9999
@@ -97,15 +98,14 @@ class SniperGun {
     // const aDondeVa = 
     var res1 = vectorDireccion(shooter.posicion, this.enemy[closest].posicion)
     var res2 = res1.normalize()
-    console.log({
-      "from": shooter.posicion,
-      "fromObj": shooter,
-      "to": this.enemy[closest].posicion,
-      "toObj": this.enemy[closest],
-      "distancia": minDist,
-      "closest": closest
-    })
+    // console.log({
+    //   "from": shooter.posicion,
+    //   "fromObj": shooter,
+    //   "to": this.enemy[closest].posicion,
+    //   "toObj": this.enemy[closest],
+    //   "distancia": minDist,
+    //   "closest": closest
+    // })
     return res2
-    // return p5.Vector.random2D()
   }
 }

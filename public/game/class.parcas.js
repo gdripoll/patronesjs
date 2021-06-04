@@ -34,3 +34,14 @@ class CapitanObserver {
     }
   }
 }
+
+class EquipoObserver {
+  constructor(equipos) {
+    this.equipos = equipos
+  }
+  murio(equipo) { // murio un equipo
+    if (this.equipos.length < 2) {
+      GameOverScreen()
+    }
+  }
+}

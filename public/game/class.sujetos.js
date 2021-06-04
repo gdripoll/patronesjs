@@ -314,10 +314,10 @@ class Equipo extends SujetoAbstracto {
         this.army.splice(i--, 1);
       }
     }
-    if (this.army.length == 0) {
-      for (var i = 0; i < this.observers.length; i++)
-        this.observers[i].murioEquipo(this);
-    }
+    // if (this.army.length == 0) {
+    //   for (var i = 0; i < this.observers.length; i++)
+    //     this.observers[i].murioEquipo(this);
+    // }
     return this.army.length;
   }
   // OBSERVER
