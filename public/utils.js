@@ -17,13 +17,13 @@ function V(x, y) {
  */
 function vectorDireccion(from, target) {
     if (from.x === target.x && from.y === target.y) {
-        return V(0,0)
+        return V(0, 0)
     }
     const newx = target.x - from.x
     const newy = target.y - from.y
     const norm = longitud(V(newx, newy))
 
-    return V(newx/norm, newy/norm)
+    return V(newx / norm, newy / norm)
 }
 
 /**
@@ -35,7 +35,7 @@ function vectorDireccion(from, target) {
  */
 function distancia(from, target) {
     if (from.x === target.x && from.y === target.y) {
-        return V(0,0)
+        return V(0, 0)
     }
     const newx = target.x - from.x
     const newy = target.y - from.y
@@ -64,7 +64,7 @@ function longitud(vector) {
  * @param function fn 
  */
 function filtrarLista(lista, fn) {
-    for(let i = 0; i < lista.length; i++) {
+    for (let i = 0; i < lista.length; i++) {
         if (!fn(lista[i])) {
             lista.splice(i, 1);
             i--;
@@ -84,8 +84,8 @@ function velocidadColision(cuerpo1, cuerpo2) {
     let direccionColision = vectorDireccion(cuerpo1, cuerpo2)
 
     // velocidades relativas en cada eje
-    let velocidadRelativa = {x: cuerpo1.vx - cuerpo2.vx, y: cuerpo1.vy - cuerpo2.vy}
-    
+    let velocidadRelativa = { x: cuerpo1.vx - cuerpo2.vx, y: cuerpo1.vy - cuerpo2.vy }
+
     // velocidad de la colisión en la dirección real (sin descomponer en cada eje)
     let velocidad = velocidadRelativa.x * direccionColision.x + velocidadRelativa.y * direccionColision.y
 
@@ -126,19 +126,19 @@ class Mensajes {
 
     agregar(mensaje, tiempo) {
         let t = tiempo || 160
-        this.mensajes.push({texto: mensaje, tiempo: t})
+        this.mensajes.push({ texto: mensaje, tiempo: t })
     }
-    
+
     mostrar() {
         filtrarLista(this.mensajes, m => m.tiempo > 0)
         if (!this.mensajes.length)
             return;
 
         push()
-        textSize(8)
-        fill(150, 0, 0)
+        textSize(10)
+        fill("yellow")
         let y = this.y
-        for(let i in this.mensajes) {
+        for (let i in this.mensajes) {
             this.mensajes[i].tiempo -= 1
             text(this.mensajes[i].texto, this.x, y)
             y += 10

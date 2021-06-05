@@ -1,24 +1,24 @@
 // MOVIMIENTOS
 // --------------------------------------------
-class moveCommon {
+class MoveCommon {
   // movimiento
   mover(posicion, velocidad) {
     return V(posicion.x + velocidad.x, posicion.y + velocidad.y);
   }
 }
-class moveHorizontal {
+class MoveHorizontal {
   // movimiento
   mover(posicion, velocidad) {
     return V(posicion.x + velocidad.x, posicion.y);
   }
 }
-class moveVertical {
+class MoveVertical {
   // movimiento
   mover(posicion, velocidad) {
     return V(posicion.x, posicion.y + velocidad.y);
   }
 }
-class moveRandom {
+class MoveRandom {
   constructor() {
     this.loop = 0
     this.dice = 0
@@ -44,4 +44,11 @@ class moveRandom {
     }
   }
 
+}
+
+class MoveDummy {
+  // movimiento
+  mover(posicion, velocidad) {
+    return posicion;
+  }
 }

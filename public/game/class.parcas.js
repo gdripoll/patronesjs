@@ -40,7 +40,8 @@ class EquipoObserver {
     this.equipos = equipos
   }
   murio(equipo) { // murio un equipo
-    if (this.equipos.length < 2) {
+    // console.log(this.equipos.length)
+    if (this.equipos.length < 3) {
       GameOverScreen()
     }
   }

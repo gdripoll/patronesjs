@@ -42,6 +42,9 @@ class Bala extends SujetoAbstracto {
       otro.sacarVida(otro.getVida())
     }
   }
+  chocarMuro(otro) {
+    otro.chocarBala(this)
+  }
 }
 
 // ARMAS

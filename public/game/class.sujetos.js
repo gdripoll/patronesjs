@@ -5,7 +5,7 @@ class SujetoAbstracto {
     this.posicion = V(x, y)
     this.objMover = mover
     this.objGun = gun
-    this.velocidad = V(getRandom(-2, 2), getRandom(-2, 2));
+    // this.velocidad = V(getRandom(-2, 2), getRandom(-2, 2));
     this.vida = 100;
     this.observers = [];
   }
@@ -63,6 +63,13 @@ class NaveGrande extends SujetoAbstracto {
   }
   dibujar() {
     circle(this.posicion.x, this.posicion.y, this.diametro);
+    push()
+    stroke(0);
+    fill(0);
+    textAlign(CENTER, CENTER);
+    textSize(15);
+    text(this.vida, this.posicion.x, this.posicion.y);
+    pop()
   }
   chocar(otro) {
     // grande 100 a grande 100
@@ -108,6 +115,9 @@ class NaveGrande extends SujetoAbstracto {
       otro.sacarVida(otro.getVida())
     }
   }
+  chocarMuro(otro) {
+    otro.chocarNaveGrande(this)
+  }
 }
 class NaveChica extends SujetoAbstracto {
   constructor(x, y, mover, gun) {
@@ -136,6 +146,12 @@ class NaveChica extends SujetoAbstracto {
   }
   dibujar() {
     circle(this.posicion.x, this.posicion.y, this.diametro);
+    push()
+    fill(0);
+    textAlign(CENTER, CENTER);
+    textSize(10);
+    text(this.vida, this.posicion.x, this.posicion.y);
+    pop()
   }
   chocar(otro) {
     // chica 100 a grande 20
@@ -181,25 +197,24 @@ class NaveChica extends SujetoAbstracto {
       otro.sacarVida(otro.getVida())
     }
   }
+  chocarMuro(otro) {
+    otro.chocarNaveChica(this)
+  }
 }
 class Palito extends SujetoAbstracto {
   constructor(x, y, mover, gun) {
     super(x, y, mover, gun);
     this.velocidad = V(4, 4);
-    this.alto = 20;
+    this.largo = 20;
   }
-  getBottom() {
-    return V(this.posicion.x, this.posicion.y + this.alto);
-  }
-  getMiddle() {
-    return V(this.posicion.x, this.posicion.y + this.alto / 2);
-  }
+  getBottom() { return V(this.posicion.x, this.posicion.y + this.largo); }
+  getMiddle() { return V(this.posicion.x, this.posicion.y + this.largo / 2); }
   // pantalla
   rebotar() {
     if (this.posicion.x <= 0 || this.posicion.x > CANVAS_WIDTH) {
       this.velocidad.x *= -1;
     }
-    if (this.posicion.y <= 0 || this.posicion.y > CANVAS_HEIGHT - this.alto) {
+    if (this.posicion.y <= 0 || this.posicion.y > CANVAS_HEIGHT - this.largo) {
       this.velocidad.y *= -1;
     }
   }
@@ -210,8 +225,16 @@ class Palito extends SujetoAbstracto {
       this.posicion.x,
       this.posicion.y,
       this.posicion.x,
-      this.posicion.y + this.alto
+      this.posicion.y + this.largo
     );
+    push()
+    fill(0);
+    textAlign(CENTER, CENTER);
+    textSize(10);
+    const pos = this.getMiddle()
+    text(this.vida, pos.x, pos.y);
+    pop()
+
   }
   // bump
   // palito 100 a grande 10
@@ -222,7 +245,7 @@ class Palito extends SujetoAbstracto {
   }
   chocarPalito(otro) {
     const d = distancia(this.posicion, otro.posicion);
-    if (Math.abs(this.posicion.x - otro.posicion.x) <= 2 && d < this.alto) {
+    if (Math.abs(this.posicion.x - otro.posicion.x) <= 2 && d < this.largo) {
       this.velocidad.mult(-1);
       otro.velocidad.mult(-1);
       this.sacarVida(100);
@@ -263,6 +286,9 @@ class Palito extends SujetoAbstracto {
       otro.sacarVida(otro.getVida())
     }
   }
+  chocarMuro(otro) {
+    otro.chocarNavePalito(this)
+  }
 }
 // --------------------------------------------
 class Equipo extends SujetoAbstracto {
@@ -270,10 +296,6 @@ class Equipo extends SujetoAbstracto {
     super(0, 0);
     this.color = color;
     this.army = army;
-    this.captains = [];
-  }
-  agregarCapitan(capitan) {
-    this.captains.push(capitan);
   }
   tick() {
     push();
@@ -303,6 +325,11 @@ class Equipo extends SujetoAbstracto {
       this.army[m].chocar(otro);
     }
   }
+  chocarMuro(otro) {
+    for (var m = 0; m < this.army.length; m++) {
+      this.army[m].chocar(otro);
+    }
+  }
   chocar(otro) {
     for (var m = 0; m < this.army.length; m++) {
       this.army[m].chocar(otro);
@@ -326,5 +353,84 @@ class Equipo extends SujetoAbstracto {
     for (var m = 0; m < this.army.length; m++) {
       this.army[m].subscribir(subscriptor);
     }
+  }
+}
+// --------------------------------------------
+class Muro extends SujetoAbstracto {
+  constructor(x, y, ancho, alto, mover, gun) {
+    super(x, y, mover, gun);
+    this.velocidad = V(0, 0);
+    this.alto = alto;
+    this.ancho = ancho
+    this.vida = 100
+  }
+  getBottom() {
+    return V(this.posicion.x + this.ancho, this.posicion.y + this.largo);
+  }
+  getMiddle() {
+    return V(this.posicion.x, this.posicion.y + this.largo / 2);
+  }
+  sacarVida(cant) { } // piso el metodo, soy invencible
+  // pantalla
+  rebotar() {
+    // if (this.posicion.x <= 0 || this.posicion.x > CANVAS_WIDTH) {
+    //   this.velocidad.x *= -1;
+    // }
+    // if (this.posicion.y <= 0 || this.posicion.y > CANVAS_HEIGHT - this.largo) {
+    //   this.velocidad.y *= -1;
+    // }
+  }
+  // draw
+  dibujar() {
+    rect(this.posicion.x, this.posicion.y, this.ancho, this.alto)
+  }
+  chocar(otro) {
+    try {
+      var x = otro.chocarMuro(this);
+    } catch (e) {
+      console.log(e, otro)
+    }
+    return x
+  }
+  chocarPalito(palito) {
+    const puntos = []
+    puntos.push(palito.posicion)
+    puntos.push(palito.getBottom())
+    for (var p = 0; p < puntos.length - 1; p++) {
+      if (isPointInsideRect(puntos[p].x, puntos[p].y, this.posicion.x, this.posicion.y, this.ancho, this.alto)) {
+        palito.velocidad.mult(-1);
+        palito.sacarVida(2); // un toque
+      }
+    }
+  }
+  chocarNaveChica(nave) {
+    const puntos = getCircleBoundingPoints(nave.posicion.x, nave.posicion.y, nave.radio, 8)
+    for (var p = 0; p < puntos.length - 1; p++) {
+      if (isPointInsideRect(puntos[p].x, puntos[p].y, this.posicion.x, this.posicion.y, this.ancho, this.alto)) {
+        nave.velocidad.mult(-1);
+        nave.sacarVida(2); // untoque
+        break;
+      }
+    }
+  }
+  chocarNaveGrande(nave) {
+    const puntos = getCircleBoundingPoints(nave.posicion.x, nave.posicion.y, nave.radio, 8)
+    for (var p = 0; p < puntos.length - 1; p++) {
+      if (isPointInsideRect(puntos[p].x, puntos[p].y, this.posicion.x, this.posicion.y, this.ancho, this.alto)) {
+        nave.velocidad.mult(-1); // rebota, no le pasa nada
+        nave.sacarVida(2); // untoque
+        break;
+      }
+    }
+  }
+  chocarBala(bala) {
+    if (isPointInsideRect(bala.posicion.x, bala.posicion.y, this.posicion.x, this.posicion.y, this.ancho, this.alto)) {
+      bala.sacarVida(bala.getVida())
+    }
+
+  }
+  chocarMuro(otro) {
+    // no pasa nada...
+    // si se superponen todo bien
   }
 }
