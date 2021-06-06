@@ -199,7 +199,7 @@ class ScreenGameOver extends ScreenAbstract {
     stroke(255);
     textAlign(CENTER, CENTER);
     textSize(100);
-    text("GAME", 200, 150);
-    text("OVER", 200, 250);
+    text("GAME", width / 2, height / 3);
+    text("OVER", width / 2, (height / 3) * 2);
   }
 }

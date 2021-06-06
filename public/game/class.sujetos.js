@@ -2,17 +2,16 @@
 // --------------------------------------------
 class SujetoAbstracto {
   constructor(x, y, mover, gun) {
-    this.posicion = V(x, y)
-    this.objMover = mover
-    this.objGun = gun
-    // this.velocidad = V(getRandom(-2, 2), getRandom(-2, 2));
+    this.posicion = V(x, y);
+    this.objMover = mover;
+    this.objGun = gun;
     this.vida = 100;
     this.observers = [];
   }
   // movimiento
   mover() {
     this.posicion = this.objMover.mover(this.posicion, this.velocidad);
-    this.objGun.disparar(this)
+    this.objGun.disparar(this);
   }
   // draw
   tick() {
@@ -48,28 +47,28 @@ class NaveGrande extends SujetoAbstracto {
       this.velocidad.x *= -1;
       this.posicion.x = this.radio;
     }
-    if (this.posicion.x >= CANVAS_WIDTH - this.radio) {
+    if (this.posicion.x >= width - this.radio) {
       this.velocidad.x *= -1;
-      this.posicion.x = CANVAS_WIDTH - this.radio;
+      this.posicion.x = width - this.radio;
     }
     if (this.posicion.y <= this.radio) {
       this.velocidad.y *= -1;
       this.posicion.y = this.radio;
     }
-    if (this.posicion.y >= CANVAS_HEIGHT - this.radio) {
+    if (this.posicion.y >= height - this.radio) {
       this.velocidad.y *= -1;
-      this.posicion.y = CANVAS_HEIGHT - this.radio;
+      this.posicion.y = height - this.radio;
     }
   }
   dibujar() {
     circle(this.posicion.x, this.posicion.y, this.diametro);
-    push()
+    push();
     stroke(0);
     fill(0);
     textAlign(CENTER, CENTER);
     textSize(15);
     text(this.vida, this.posicion.x, this.posicion.y);
-    pop()
+    pop();
   }
   chocar(otro) {
     // grande 100 a grande 100
@@ -111,12 +110,12 @@ class NaveGrande extends SujetoAbstracto {
   }
   chocarBala(otro) {
     if (distancia(this.posicion, otro.posicion) < this.radio) {
-      this.sacarVida(20)
-      otro.sacarVida(otro.getVida())
+      this.sacarVida(20);
+      otro.sacarVida(otro.getVida());
     }
   }
   chocarMuro(otro) {
-    otro.chocarNaveGrande(this)
+    otro.chocarNaveGrande(this);
   }
 }
 class NaveChica extends SujetoAbstracto {
@@ -131,27 +130,27 @@ class NaveChica extends SujetoAbstracto {
       this.velocidad.x *= -1;
       this.posicion.x = this.radio;
     }
-    if (this.posicion.x >= CANVAS_WIDTH - this.radio) {
+    if (this.posicion.x >= width - this.radio) {
       this.velocidad.x *= -1;
-      this.posicion.x = CANVAS_WIDTH - this.radio;
+      this.posicion.x = width - this.radio;
     }
     if (this.posicion.y <= this.radio) {
       this.velocidad.y *= -1;
       this.posicion.y = this.radio;
     }
-    if (this.posicion.y >= CANVAS_HEIGHT - this.radio) {
+    if (this.posicion.y >= height - this.radio) {
       this.velocidad.y *= -1;
-      this.posicion.y = CANVAS_HEIGHT - this.radio;
+      this.posicion.y = height - this.radio;
     }
   }
   dibujar() {
     circle(this.posicion.x, this.posicion.y, this.diametro);
-    push()
+    push();
     fill(0);
     textAlign(CENTER, CENTER);
     textSize(10);
     text(this.vida, this.posicion.x, this.posicion.y);
-    pop()
+    pop();
   }
   chocar(otro) {
     // chica 100 a grande 20
@@ -193,12 +192,12 @@ class NaveChica extends SujetoAbstracto {
   }
   chocarBala(otro) {
     if (distancia(this.posicion, otro.posicion) < this.radio) {
-      this.sacarVida(20)
-      otro.sacarVida(otro.getVida())
+      this.sacarVida(20);
+      otro.sacarVida(otro.getVida());
     }
   }
   chocarMuro(otro) {
-    otro.chocarNaveChica(this)
+    otro.chocarNaveChica(this);
   }
 }
 class Palito extends SujetoAbstracto {
@@ -207,14 +206,18 @@ class Palito extends SujetoAbstracto {
     this.velocidad = V(1, 1);
     this.largo = 20;
   }
-  getBottom() { return V(this.posicion.x, this.posicion.y + this.largo); }
-  getMiddle() { return V(this.posicion.x, this.posicion.y + this.largo / 2); }
+  getBottom() {
+    return V(this.posicion.x, this.posicion.y + this.largo);
+  }
+  getMiddle() {
+    return V(this.posicion.x, this.posicion.y + this.largo / 2);
+  }
   // pantalla
   rebotar() {
-    if (this.posicion.x <= 0 || this.posicion.x > CANVAS_WIDTH) {
+    if (this.posicion.x <= 0 || this.posicion.x > width) {
       this.velocidad.x *= -1;
     }
-    if (this.posicion.y <= 0 || this.posicion.y > CANVAS_HEIGHT - this.largo) {
+    if (this.posicion.y <= 0 || this.posicion.y > height - this.largo) {
       this.velocidad.y *= -1;
     }
   }
@@ -227,14 +230,13 @@ class Palito extends SujetoAbstracto {
       this.posicion.x,
       this.posicion.y + this.largo
     );
-    push()
+    push();
     fill(0);
     textAlign(CENTER, CENTER);
     textSize(10);
-    const pos = this.getMiddle()
+    const pos = this.getMiddle();
     text(this.vida, pos.x, pos.y);
-    pop()
-
+    pop();
   }
   // bump
   // palito 100 a grande 10
@@ -278,16 +280,20 @@ class Palito extends SujetoAbstracto {
   }
   chocarBala(otro) {
     // NOTA >
-    // el parseInt sobre el X es imprescindible, porque la pocision de 
-    // la bala llega con float, con lo cual es casi imposible que concuerde 
+    // el parseInt sobre el X es imprescindible, porque la pocision de
+    // la bala llega con float, con lo cual es casi imposible que concuerde
     // con el X del palito
-    if (this.posicion.x == parseInt(otro.posicion.x) && (this.posicion.y < otro.posicion.y && this.getBottom().y >= otro.posicion.y)) {
-      this.sacarVida(this.getVida())
-      otro.sacarVida(otro.getVida())
+    if (
+      this.posicion.x == parseInt(otro.posicion.x) &&
+      this.posicion.y < otro.posicion.y &&
+      this.getBottom().y >= otro.posicion.y
+    ) {
+      this.sacarVida(this.getVida());
+      otro.sacarVida(otro.getVida());
     }
   }
   chocarMuro(otro) {
-    otro.chocarNavePalito(this)
+    otro.chocarNavePalito(this);
   }
 }
 // --------------------------------------------
@@ -361,8 +367,8 @@ class Muro extends SujetoAbstracto {
     super(x, y, mover, gun);
     this.velocidad = V(0, 0);
     this.alto = alto;
-    this.ancho = ancho
-    this.vida = 100
+    this.ancho = ancho;
+    this.vida = 100;
   }
   // getBottom() {
   //   return V(this.posicion.x + this.ancho, this.posicion.y + this.largo);
@@ -370,34 +376,43 @@ class Muro extends SujetoAbstracto {
   // getMiddle() {
   //   return V(this.posicion.x, this.posicion.y + this.largo / 2);
   // }
-  sacarVida(cant) { } // piso el metodo, soy invencible
+  sacarVida(cant) {} // piso el metodo, soy invencible
   // pantalla
   rebotar() {
-    // if (this.posicion.x <= 0 || this.posicion.x > CANVAS_WIDTH) {
+    // if (this.posicion.x <= 0 || this.posicion.x > width) {
     //   this.velocidad.x *= -1;
     // }
-    // if (this.posicion.y <= 0 || this.posicion.y > CANVAS_HEIGHT - this.largo) {
+    // if (this.posicion.y <= 0 || this.posicion.y > height - this.largo) {
     //   this.velocidad.y *= -1;
     // }
   }
   // draw
   dibujar() {
-    rect(this.posicion.x, this.posicion.y, this.ancho, this.alto)
+    rect(this.posicion.x, this.posicion.y, this.ancho, this.alto);
   }
   chocar(otro) {
     try {
       var x = otro.chocarMuro(this);
     } catch (e) {
-      console.log(e, otro)
+      console.log(e, otro);
     }
-    return x
+    return x;
   }
   chocarPalito(palito) {
-    const puntos = []
-    puntos.push(palito.posicion)
-    puntos.push(palito.getBottom())
+    const puntos = [];
+    puntos.push(palito.posicion);
+    puntos.push(palito.getBottom());
     for (var p = 0; p < puntos.length; p++) {
-      if (isPointInsideRect(puntos[p].x, puntos[p].y, this.posicion.x, this.posicion.y, this.ancho, this.alto)) {
+      if (
+        isPointInsideRect(
+          puntos[p].x,
+          puntos[p].y,
+          this.posicion.x,
+          this.posicion.y,
+          this.ancho,
+          this.alto
+        )
+      ) {
         palito.velocidad.mult(-1);
         palito.sacarVida(2); // un toque
         break;
@@ -405,9 +420,23 @@ class Muro extends SujetoAbstracto {
     }
   }
   chocarNaveChica(nave) {
-    const puntos = getCircleBoundingPoints(nave.posicion.x, nave.posicion.y, nave.radio, 8)
+    const puntos = getCircleBoundingPoints(
+      nave.posicion.x,
+      nave.posicion.y,
+      nave.radio,
+      8
+    );
     for (var p = 0; p < puntos.length; p++) {
-      if (isPointInsideRect(puntos[p].x, puntos[p].y, this.posicion.x, this.posicion.y, this.ancho, this.alto)) {
+      if (
+        isPointInsideRect(
+          puntos[p].x,
+          puntos[p].y,
+          this.posicion.x,
+          this.posicion.y,
+          this.ancho,
+          this.alto
+        )
+      ) {
         nave.velocidad.mult(-1);
         nave.sacarVida(2); // untoque
         break;
@@ -415,9 +444,23 @@ class Muro extends SujetoAbstracto {
     }
   }
   chocarNaveGrande(nave) {
-    const puntos = getCircleBoundingPoints(nave.posicion.x, nave.posicion.y, nave.radio, 8)
+    const puntos = getCircleBoundingPoints(
+      nave.posicion.x,
+      nave.posicion.y,
+      nave.radio,
+      8
+    );
     for (var p = 0; p < puntos.length; p++) {
-      if (isPointInsideRect(puntos[p].x, puntos[p].y, this.posicion.x, this.posicion.y, this.ancho, this.alto)) {
+      if (
+        isPointInsideRect(
+          puntos[p].x,
+          puntos[p].y,
+          this.posicion.x,
+          this.posicion.y,
+          this.ancho,
+          this.alto
+        )
+      ) {
         nave.velocidad.mult(-1); // rebota, no le pasa nada
         nave.sacarVida(2); // untoque
         break;
@@ -425,10 +468,18 @@ class Muro extends SujetoAbstracto {
     }
   }
   chocarBala(bala) {
-    if (isPointInsideRect(bala.posicion.x, bala.posicion.y, this.posicion.x, this.posicion.y, this.ancho, this.alto)) {
-      bala.sacarVida(bala.getVida())
+    if (
+      isPointInsideRect(
+        bala.posicion.x,
+        bala.posicion.y,
+        this.posicion.x,
+        this.posicion.y,
+        this.ancho,
+        this.alto
+      )
+    ) {
+      bala.sacarVida(bala.getVida());
     }
-
   }
   chocarMuro(otro) {
     // no pasa nada...

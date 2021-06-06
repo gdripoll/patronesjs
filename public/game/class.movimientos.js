@@ -20,12 +20,12 @@ class MoveVertical {
 }
 class MoveRandom {
   constructor() {
-    this.loop = 0
-    this.dice = 0
+    this.loop = 0;
+    this.dice = 0;
   }
   // movimiento
   mover(posicion, velocidad) {
-    this.roll()
+    this.roll();
     if (this.dice > 80) {
       return V(posicion.x + velocidad.x, posicion.y + velocidad.y);
     } else if (this.dice > 70) {
@@ -40,10 +40,9 @@ class MoveRandom {
   }
   roll() {
     if (this.loop++ % 60 == 0) {
-      this.dice = getRandom(0, 100)
+      this.dice = random(0, 100);
     }
   }
-
 }
 
 class MoveDummy {

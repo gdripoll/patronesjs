@@ -3,19 +3,18 @@
 // profesor: oclesnd@globalhitss.com
 
 // CONSTANTS
-const CANVAS_WIDTH = 400;
-const CANVAS_HEIGHT = 400;
 const MensajesGeneral = new Mensajes(300, 10);
-let entidades = []; // global
-
 const ScrManager = new ScreenManager();
 
+let entidades = []; // global
+
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(windowWidth, windowHeight);
+
   ScrManager.add(new ScreenMatch("match", MensajesGeneral));
   ScrManager.add(new ScreenPointsTest("points", MensajesGeneral));
   ScrManager.add(new ScreenGameOver("gameover", MensajesGeneral));
-  ScrManager.jumpTo("gameover");
+  ScrManager.jumpTo("match");
 }
 
 function draw() {
