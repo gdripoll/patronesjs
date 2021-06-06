@@ -23,9 +23,9 @@ function setup() {
   // ---PROPS------------------------
   p = new Muro(70, 75, 8, 250, new MoveDummy(), new DummyGun(equipo1)); props1.push(p)
   p = new Muro(330, 75, 8, 250, new MoveDummy(), new DummyGun(equipo1)); props1.push(p)
-  p = new Muro(130, 130, 150, 8, new MoveDummy(), new DummyGun(equipo1)); props1.push(p)
-  p = new Muro(130, 330, 150, 8, new MoveDummy(), new DummyGun(equipo1)); props1.push(p)
-  p = new Muro(180, 230, 25, 25, new MoveDummy(), new DummyGun(equipo1)); props1.push(p)
+  p = new Muro(130, 100, 150, 8, new MoveDummy(), new DummyGun(equipo1)); props1.push(p)
+  p = new Muro(130, 300, 150, 8, new MoveDummy(), new DummyGun(equipo1)); props1.push(p)
+  p = new Muro(190, 200, 25, 25, new MoveDummy(), new DummyGun(equipo1)); props1.push(p)
 
   props = new Equipo(props1, "blue")
   entidades.push(props)

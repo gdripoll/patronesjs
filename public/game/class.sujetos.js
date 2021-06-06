@@ -204,7 +204,7 @@ class NaveChica extends SujetoAbstracto {
 class Palito extends SujetoAbstracto {
   constructor(x, y, mover, gun) {
     super(x, y, mover, gun);
-    this.velocidad = V(4, 4);
+    this.velocidad = V(1, 1);
     this.largo = 20;
   }
   getBottom() { return V(this.posicion.x, this.posicion.y + this.largo); }
@@ -364,12 +364,12 @@ class Muro extends SujetoAbstracto {
     this.ancho = ancho
     this.vida = 100
   }
-  getBottom() {
-    return V(this.posicion.x + this.ancho, this.posicion.y + this.largo);
-  }
-  getMiddle() {
-    return V(this.posicion.x, this.posicion.y + this.largo / 2);
-  }
+  // getBottom() {
+  //   return V(this.posicion.x + this.ancho, this.posicion.y + this.largo);
+  // }
+  // getMiddle() {
+  //   return V(this.posicion.x, this.posicion.y + this.largo / 2);
+  // }
   sacarVida(cant) { } // piso el metodo, soy invencible
   // pantalla
   rebotar() {
@@ -396,16 +396,17 @@ class Muro extends SujetoAbstracto {
     const puntos = []
     puntos.push(palito.posicion)
     puntos.push(palito.getBottom())
-    for (var p = 0; p < puntos.length - 1; p++) {
+    for (var p = 0; p < puntos.length; p++) {
       if (isPointInsideRect(puntos[p].x, puntos[p].y, this.posicion.x, this.posicion.y, this.ancho, this.alto)) {
         palito.velocidad.mult(-1);
         palito.sacarVida(2); // un toque
+        break;
       }
     }
   }
   chocarNaveChica(nave) {
     const puntos = getCircleBoundingPoints(nave.posicion.x, nave.posicion.y, nave.radio, 8)
-    for (var p = 0; p < puntos.length - 1; p++) {
+    for (var p = 0; p < puntos.length; p++) {
       if (isPointInsideRect(puntos[p].x, puntos[p].y, this.posicion.x, this.posicion.y, this.ancho, this.alto)) {
         nave.velocidad.mult(-1);
         nave.sacarVida(2); // untoque
@@ -415,7 +416,7 @@ class Muro extends SujetoAbstracto {
   }
   chocarNaveGrande(nave) {
     const puntos = getCircleBoundingPoints(nave.posicion.x, nave.posicion.y, nave.radio, 8)
-    for (var p = 0; p < puntos.length - 1; p++) {
+    for (var p = 0; p < puntos.length; p++) {
       if (isPointInsideRect(puntos[p].x, puntos[p].y, this.posicion.x, this.posicion.y, this.ancho, this.alto)) {
         nave.velocidad.mult(-1); // rebota, no le pasa nada
         nave.sacarVida(2); // untoque

@@ -37,7 +37,9 @@ function getCircleBoundingPoints(x, y, radio, cant = 8) {
   return results
 }
 function isPointInsideRect(px, py, rx, ry, ancho, largo) {
-  return ((px >= rx && px <= rx + ancho) && (py >= ry && py <= ry + largo))
+  const res = ((px >= rx && px <= rx + ancho) && (py >= ry && py <= ry + largo))
+  // console.log(res, px, py, rx, ry, ancho, largo)
+  return res
 }
 
 // FUNCIONES VARIAS DE PRUEBA
