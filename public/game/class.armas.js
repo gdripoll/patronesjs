@@ -19,7 +19,7 @@ class Bala extends SujetoAbstracto {
   }
   dibujar() {
     push();
-    strokeWeight(4);
+    strokeWeight(5);
     point(this.posicion.x, this.posicion.y);
     pop();
   }
@@ -36,10 +36,7 @@ class Bala extends SujetoAbstracto {
     return otro.chocarBala(this);
   }
   chocarBala(otro) {
-    if (
-      this.posicion.x == otro.posicion.y &&
-      this.posicion.y == otro.posicion.y
-    ) {
+    if (this.posicion.x == otro.posicion.y && this.posicion.y == otro.posicion.y) {
       this.sacarVida(this.getVida());
       otro.sacarVida(otro.getVida());
     }
@@ -60,11 +57,7 @@ class RandomGun {
     if (this.loop++ % 30 == 0) {
       let direccion = p5.Vector.random2D();
       direccion.mult(shooter.radio + 1);
-      let bala = new Bala(
-        shooter.posicion.x + direccion.x,
-        shooter.posicion.y + direccion.y,
-        direccion
-      );
+      let bala = new Bala(shooter.posicion.x + direccion.x, shooter.posicion.y + direccion.y, direccion);
       this.entidades.push(bala);
     }
   }
@@ -83,13 +76,9 @@ class SniperGun {
   }
   disparar(shooter) {
     if (this.loop++ % 30 == 0 && this.enemy.length) {
-      let direccion = this.findMeATarget(shooter); //p5.Vector.random2D()
+      let direccion = this.findMeATarget(shooter);
       direccion.mult(shooter.radio + 1);
-      let bala = new Bala(
-        shooter.posicion.x + direccion.x,
-        shooter.posicion.y + direccion.y,
-        direccion
-      );
+      let bala = new Bala(shooter.posicion.x + direccion.x, shooter.posicion.y + direccion.y, direccion);
       this.army.push(bala);
     }
   }
@@ -105,8 +94,6 @@ class SniperGun {
         closest = i;
       }
     }
-
-    // const aDondeVa =
     var res1 = vectorDireccion(shooter.posicion, this.enemy[closest].posicion);
     var res2 = res1.normalize();
     // console.log({

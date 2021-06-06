@@ -45,6 +45,10 @@ function isPointInsideRect(px, py, rx, ry, ancho, largo) {
 // FUNCIONES VARIAS DE PRUEBA
 // -------------------------------------
 function mousePressed() {
+  push();
+  fill(255);
+  stroke(255);
+  strokeWeight(40);
   let bala = new Bala(200, 200, p5.Vector.random2D());
   entidades.push(bala);
   bala = new Bala(200, 210, p5.Vector.random2D());
@@ -53,14 +57,14 @@ function mousePressed() {
   entidades.push(bala);
   bala = new Bala(210, 200, p5.Vector.random2D());
   entidades.push(bala);
+  pop();
 }
 function mouseDragged() {
   // posicion del mouse
-  document.querySelector(".px-3 h1").innerHTML =
-    "[" + mouseX + "," + mouseY + "]";
+  document.querySelector("h1").innerHTML = "[" + mouseX + "," + mouseY + "]";
   return false;
 }
 function mouseReleased() {
   // posicion del mouse
-  document.querySelector(".px-3 h1").innerHTML = "Patrones de diseño";
+  document.querySelector("h1").innerHTML = "Patrones de diseño";
 }
