@@ -17,29 +17,57 @@ class ScreenManager {
   draw() {
     this.screens[this.current].draw();
   }
+  // MOUSE EVENTS
+  mousePressed() {
+    return this.screens[this.current].mousePressed();
+  }
+  mouseDragged() {
+    return this.screens[this.current].mouseDragged();
+  }
+  mouseReleased() {
+    return this.screens[this.current].mouseReleased();
+  }
+  mouseClicked() {
+    return this.screens[this.current].mouseClicked();
+  }
 }
-
 // ------------------------------------------------------
 // SCREENS
 // ------------------------------------------------------
-
 class ScreenAbstract {
-  constructor(name, mensajes, layout) {
+  constructor(name, mensajes) {
     this.name = name;
     this.mensajes = mensajes;
-    this.layout = layout;
   }
   setup() {
-    entidades.push(this.layout.getWalls());
+    entidades = [];
   }
-  dras() {
+  draw() {
     throw new Error("must be implemented.");
+  }
+  // MOUSE EVENTS
+  mousePressed() {
+    return false;
+  }
+  mouseDragged() {
+    // posicion del mouse
+    document.querySelector("h1").innerHTML = "[" + parseInt(mouseX) + "," + parseInt(mouseY) + "]";
+    return false;
+  }
+  mouseReleased() {
+    // posicion del mouse
+    document.querySelector("h1").innerHTML = "Patrones de diseño";
+    return false;
+  }
+  mouseClicked() {
+    return false;
   }
 }
 
 class ScreenMatch extends ScreenAbstract {
   constructor(name, mensajes, layout) {
-    super(name, mensajes, layout);
+    super(name, mensajes);
+    this.layout = layout;
   }
   setup() {
     super.setup();
@@ -48,6 +76,7 @@ class ScreenMatch extends ScreenAbstract {
     // ---EQUIPOS----------------------
     let equipo1 = [];
     let equipo2 = [];
+    entidades.push(this.layout.getWalls());
     // ---EQUIPO1----------------------
     for (var i = 0; i < 2; i++) {
       const n = new NaveGrande(getRandomX(), getRandomY(), new MoveHorizontal(), new SniperGun(equipo1, equipo2));
@@ -136,8 +165,8 @@ class ScreenMatch extends ScreenAbstract {
   }
 }
 class ScreenPointsTest extends ScreenAbstract {
-  constructor(name, mensajes, layout) {
-    super(name, mensajes, layout);
+  constructor(name, mensajes) {
+    super(name, mensajes);
   }
   setup() {
     super.setup();
@@ -186,46 +215,78 @@ class ScreenGameOver extends ScreenAbstract {
     text("OVER", width / 2, (height / 3) * 2);
   }
 }
-
-// ------------------------------------------------------
-// LAYOUTS
-// ------------------------------------------------------
-class LayoutAbstracto {
-  constructor(color) {
-    this.wallColor = color;
+class ScreenStart extends ScreenAbstract {
+  constructor(name, mensajes, layout) {
+    super(name, mensajes, layout);
   }
-  getWalls() {
-    throw new Error("must be implemented.");
+  setup() {
+    super.setup();
+    background(0);
+    let b1 = new Button(uX(30), uY(30), uX(50), uY(12), "-= Start =-", 50, color(255), color(0, 0, 255, 180));
+    b1.onClick = () => {
+      ScrManager.jumpTo("match");
+    };
+    entidades.push(b1);
+    let b2 = new Button(uX(30), uY(45), uX(50), uY(12), "* Demo círculo *", 50, color(255), color(0, 0, 255, 180));
+    b2.onClick = () => {
+      ScrManager.jumpTo("points");
+    };
+    entidades.push(b2);
+  }
+  draw() {
+    push();
+    fill(random(0, 255), random(0, 255), random(0, 255), random(0, 255));
+    noStroke();
+    circle(random(0, width), random(0, height), random(15, 25));
+    pop();
+
+    // draw
+    for (let i = 0; i < entidades.length; i++) entidades[i].tick();
+  }
+  mouseClicked() {
+    for (let i = 0; i < entidades.length; i++) if (entidades[i].click) entidades[i].click();
   }
 }
 
-class LayoutVacio extends LayoutAbstracto {
-  constructor(color) {
-    super(color);
+class Componente {
+  constructor(x, y, ancho, alto) {
+    this.posicion = V(x, y);
+    this.ancho = ancho;
+    this.alto = alto;
+    this.onClick = () => {
+      console.log(x + "," + y + ": onClick not implemented.");
+    };
   }
-  getWalls() {
-    return new Equipo([], this.wallColor);
+  tick() {
+    this.draw();
+  }
+  draw() {
+    throw new Error("Must be implemented");
+  }
+  click() {
+    if (isPointInsideRect(mouseX, mouseY, this.posicion.x, this.posicion.y, this.ancho, this.alto)) {
+      this.onClick();
+    }
   }
 }
-class LayoutBasico extends LayoutAbstracto {
-  constructor(color) {
-    super(color);
+class Button extends Componente {
+  constructor(x, y, ancho, alto, texto, size = 15, color, bgColor) {
+    super(x, y, ancho, alto);
+    this.size = size;
+    this.texto = texto;
+    this.color = color;
+    this.bgColor = bgColor;
   }
-  getWalls() {
-    let props = [];
-    const uX = width / 10;
-    const uY = height / 10;
-    const thick = 10;
-    const gun = new DummyGun([]);
-    const mover = new MoveDummy();
-    // vert
-    props.push(new Muro(2 * uX, 2 * uY, thick, 6 * uY, mover, gun));
-    props.push(new Muro(8 * uX, 2 * uY, thick, 6 * uY, mover, gun));
-    // horiz
-    props.push(new Muro(3.5 * uX, 2 * uY, 3 * uX, thick, mover, gun));
-    props.push(new Muro(3.5 * uX, 8 * uY, 3 * uX, thick, mover, gun));
-    // center
-    props.push(new Muro((width - 40) / 2, (height - 40) / 2, 40, 40, mover, gun));
-    return new Equipo(props, this.wallColor);
+  draw() {
+    push();
+    fill(this.bgColor);
+    stroke(this.bgColor);
+    rect(this.posicion.x, this.posicion.y, this.ancho, this.alto);
+    fill(this.color);
+    stroke(this.color);
+    textAlign(CENTER, CENTER);
+    textSize(this.size);
+    text(this.texto, this.posicion.x, this.posicion.y, this.ancho, this.alto);
+    pop();
   }
 }
